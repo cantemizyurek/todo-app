@@ -1,9 +1,15 @@
 let todos = [];
 
+const ntod = JSON.parse(localStorage.getItem('todos'));
+
 const taskListElement = document.querySelector('.task-list');
 const newTaskForm = document.querySelector('#new-task-form');
 
 const tasksList = document.querySelector('#tasks');
+
+const save = () => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+}
 
 class Task {
     constructor(title){
@@ -12,6 +18,7 @@ class Task {
     }
 
     create(){
+        save();
         return `
         <div class="content">
             <input 
@@ -55,6 +62,7 @@ const createElement = (task) =>{
         div.remove();
 
         todos = todos.filter(todo => todo.id !== task.id);
+        save();
     });
 
     div.querySelector('.edit').addEventListener('click', () => {
@@ -73,13 +81,26 @@ const createElement = (task) =>{
     return div;
 }
 
+const display = () => {
+    if(ntod){
+        ntod.forEach(todo => {
+            const ntodo = new Task(todo.title);
+            todos.push(ntodo);
+            tasksList.append(createElement(ntodo));
+       })   
+    }
+};
+
 newTaskForm.addEventListener('submit', function(event){
     event.preventDefault();
     const taskTitle = this.querySelector('#new-task-input');
     const taskTitleValue = taskTitle.value;
+    taskTitle.value= '';
 
     const task = new Task(taskTitleValue);
     todos.push(task);
 
     tasksList.append(createElement(task));
 });
+
+display();
