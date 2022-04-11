@@ -35,6 +35,12 @@ const createElement = (task) =>{
 
     div.innerHTML = task.create();
 
+    div.querySelector('.delete').addEventListener('click', () => {
+        div.remove();
+
+        todos = todos.filter(todo => todo.id !== task.id);
+    });
+
     return div;
 }
 
