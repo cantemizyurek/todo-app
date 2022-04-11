@@ -81,15 +81,12 @@ const createElement = (task) =>{
     return div;
 }
 
-const display = () => {
-    if(ntod){
-        ntod.forEach(todo => {
-            const ntodo = new Task(todo.title);
-            todos.push(ntodo);
-            tasksList.append(createElement(ntodo));
-       })   
-    }
-};
+const createTask = (taskTitle) => {
+    const task = new Task(taskTitle);
+    todos.push(task);
+
+    tasksList.append(createElement(task));
+}
 
 newTaskForm.addEventListener('submit', function(event){
     event.preventDefault();
@@ -97,10 +94,15 @@ newTaskForm.addEventListener('submit', function(event){
     const taskTitleValue = taskTitle.value;
     taskTitle.value= '';
 
-    const task = new Task(taskTitleValue);
-    todos.push(task);
-
-    tasksList.append(createElement(task));
+    createTask(taskTitleValue);
 });
+
+const display = () => {
+    if(ntod){
+        ntod.forEach(todo => {
+            createTask(todo.title);
+       })   
+    }
+};
 
 display();
