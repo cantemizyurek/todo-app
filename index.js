@@ -26,6 +26,22 @@ class Task {
         </div>
         `
     }
+
+    edit(){
+        return `
+        <div class="content">
+            <input 
+                type="text" 
+                class="text" 
+                value="${this.title}"
+            >
+        </div>
+        <div class="actions">
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+        </div>
+        `
+    }
 }
 
 const createElement = (task) =>{
@@ -41,15 +57,28 @@ const createElement = (task) =>{
         todos = todos.filter(todo => todo.id !== task.id);
     });
 
+    div.querySelector('.edit').addEventListener('click', () => {
+        div.innerHTML = task.edit();
+        div.querySelector('input').focus();
+
+
+        div.querySelector('input').addEventListener('keydown', function(e){
+            if (e.keyCode === 13) {
+                task.title = div.querySelector('input').value;
+                div.innerHTML = task.create();
+            }
+        });
+    });
+
     return div;
 }
 
 newTaskForm.addEventListener('submit', function(event){
     event.preventDefault();
     const taskTitle = this.querySelector('#new-task-input');
-    const taskTitleVale = taskTitle.value;
+    const taskTitleValue = taskTitle.value;
 
-    const task = new Task(taskTitleVale);
+    const task = new Task(taskTitleValue);
     todos.push(task);
 
     tasksList.append(createElement(task));
